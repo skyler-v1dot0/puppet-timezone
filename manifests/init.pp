@@ -65,33 +65,33 @@ class timezone (
     }
   }
 
-  if $package {
-    $use_debconf = lookup('timezone::use_debconf', Boolean, 'first', false)
-    if $use_debconf and $timezone_ensure != 'absent' {
-      $_tz = split($timezone, '/')
-      $area = $_tz[0]
-      $zone = $_tz[1]
+  #if $package {
+    #$use_debconf = lookup('timezone::use_debconf', Boolean, 'first', false)
+    #if $use_debconf and $timezone_ensure != 'absent' {
+      #$_tz = split($timezone, '/')
+      #$area = $_tz[0]
+      #$zone = $_tz[1]
 
-      debconf {
-        'tzdata/Areas':
-          package => 'tzdata',
-          item    => 'tzdata/Areas',
-          type    => 'select',
-          value   => $area;
-        "tzdata/Zones/${area}":
-          package => 'tzdata',
-          item    => "tzdata/Zones/${area}",
-          type    => 'select',
-          value   => $zone;
-      }
-      -> Package[$package]
-    }
+      #debconf {
+        #'tzdata/Areas':
+          #package => 'tzdata',
+          #item    => 'tzdata/Areas',
+          #type    => 'select',
+          #value   => $area;
+        #"tzdata/Zones/${area}":
+          #package => 'tzdata',
+          #item    => "tzdata/Zones/${area}",
+          #type    => 'select',
+          #value   => $zone;
+      #}
+      #-> Package[$package]
+    #}
 
-    package { $package:
-      ensure => $package_ensure,
-      before => File[$localtime_file],
-    }
-  }
+    #package { $package:
+      #ensure => $package_ensure,
+      #before => File[$localtime_file],
+    #}
+  #}
 
   $notify = $notify_services.map |$svc| { Service[$svc] }
 
